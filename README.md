@@ -7,7 +7,11 @@ The application simulates the functionality of a typical social media app. It's 
 
 2 Make sure you have Docker and docker-compose installed.
 
-3 Start the containers using the command:
+3 Build the containers using the command:
+
+    docker compose up -d —build
+
+4 Start the containers using the command:
   
     docker-compose up -d
 
