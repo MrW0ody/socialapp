@@ -19,7 +19,7 @@ The application simulates the functionality of a typical social media app. It's 
 
 Navigate to the application's home page by opening a web browser and visiting 
 
-    localhost:8000/account/login.
+    localhost:8000/account/login/
     
 # Log in using one of the following sample credentials:
 
