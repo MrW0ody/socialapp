@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}Update Comment{% endblock %}
+
+{% block content %}
+    <div class="comment-edit-form-container">
+        <form method="post">
+            {{ form.as_p }}
+            {% csrf_token %}
+            <p><input type="submit" value="Update"></p>
+        </form>
+    </div>
+{% endblock %}
+
+{% block content2 %}
+    <h3>My Followers</h3>
+    {% for follower in request.user.profile.follows.all %}
+        <div class="follower">
+
+            <a href="{% url 'profile' follower.user.id %}"><img src="{{ follower.user.profile.profile_picture.url }}"
+                                                                class="profile-image-miniature">
+                <p>{{ follower.user.username }}</p></a>
+            {% if follower.bio %}
+                <p>{{ follower.bio }}</p>
+            {% endif %}
+            {% if follower.date_of_birth %}
+                <p>{{ follower.date_of_birth }}</p>
+            {% endif %}
+            <input type="submit" value="Unfollow" class="unfollow-button">
+        </div>
+    {% endfor %}
+{% endblock %}

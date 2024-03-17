@@ -1,0 +1,37 @@
+<div class="comments">
+    <h1>Comments:</h1>
+    <br>
+    <br>
+    <div class="comment">
+        {% for comment in comments %}
+            <h3>Author : {{ comment.author }}</h3>
+            <h5>created : {{ comment.created }}</h5>
+            <p>{{ comment }}</p>
+            <br>
+            <p>Likes {{ comment.number_of_likes }}</p>
+            <br>
+            {% if comment.author == request.user %}
+                <div class="post-buttons-container">
+                    <form method="get" action="{% url 'feed:update_comment' comment.id %}">
+                        {% csrf_token %}
+                        <input type="submit" value="Update" class="update-button">
+                    </form>
+                    <form method="post" action="{% url 'feed:delete_comment' comment.id %}">
+                        {% csrf_token %}
+                        <input type="submit" value="Delete" class="delete-button">
+                    </form>
+                </div>
+            {% endif %}
+            <form method="post" action="{% url 'feed:react_to_comment' comment.id %}">
+                {% csrf_token %}
+                {% if request.user in comment.likes.all %}
+                    <input type="submit" value="Unlike" class="unlike-button">
+                {% else %}
+                    <input type="submit" value="Like" class="like-button">
+                {% endif %}
+            </form>
+            <br>
+            <hr>
+        {% endfor %}
+    </div>
+</div>

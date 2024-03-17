@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit profile {{ request.user }}{% endblock %}
+
+{% block content %}
+    <div class="edit-profile-form">
+        <form method="post">
+            {% csrf_token %}
+            {{ user_form.as_p }}
+            {{ profile_form.as_p }}
+            <input type="submit" value="Update" class="update-button">
+        </form>
+    </div>
+{% endblock %}
+
+{% block content2 %}
+    <h3>My Followers</h3>
+    {% for follower in request.user.profile.follows.all %}
+        <div class="follower">
+
+            <a href="{% url 'profile' follower.user.id %}"><img src="{{ follower.user.profile.profile_picture.url }}"
+                                                                class="profile-image-miniature">
+                <p>{{ follower.user.username }}</p></a>
+            {% if follower.bio %}
+                <p>{{ follower.bio }}</p>
+            {% endif %}
+            {% if follower.date_of_birth %}
+                <p>{{ follower.date_of_birth }}</p>
+            {% endif %}
+        </div>
+    {% endfor %}
+{% endblock %}

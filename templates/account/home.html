@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+    <div class="search">
+        <h1><a href="{% url 'feed:search_posts' %}">Search Post</a></h1>
+    </div>
+    {% if followed_user_posts %}
+        {% for post in followed_user_posts %}
+            <div class="post-container">
+                <h2><a href="{{ post.get_absolute_url }}">{{ post }}</a></h2>
+                <p>Published on {{ post.created }} by {{ post.author }}</p>
+                <br>
+                <p>{{ post.content|linebreaks|truncatewords:30 }}</p>
+                <br>
+            </div>
+        {% endfor %}
+    {% else %}
+        <h1>You don't have any post yet</h1>
+    {% endif %}
+{% endblock %}
+
+{% block content2 %}
+    <h3>My Followers</h3>
+    {% for follower in request.user.profile.follows.all %}
+        <div class="follower">
+            <a href="{% url 'profile' follower.user.id %}"><img src="{{ follower.user.profile.profile_picture.url }}"
+                                                                class="profile-image-miniature">
+                <p>{{ follower.user.username }}</p></a>
+            {% if follower.bio %}
+                <p>{{ follower.bio }}</p>
+            {% endif %}
+            {% if follower.date_of_birth %}
+                <p>{{ follower.date_of_birth }}</p>
+            {% endif %}
+        </div>
+    {% endfor %}
+{% endblock %}

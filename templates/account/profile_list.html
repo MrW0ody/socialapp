@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="search">
+        <h1><a href="{% url 'profile_search' %}">Search Profile</a></h1>
+    </div>
+    <div class="follower-container">
+        <br>
+        <hr>
+        <br>
+        <h1>People to follow:</h1>
+        {% for profile in profiles %}
+            <div class="profile">
+                <a href="{% url 'profile' profile.user.id %}"><img src="{{ profile.user.profile.profile_picture.url }}"
+                                                                   class="profile-image-miniature">
+                    <p>{{ profile.user.username }}</p></a>
+                <div class="info">
+
+                    {% if profile.bio %}
+                        <p>{{ profile.bio }}</p>
+                    {% endif %}
+
+                    {% if profile.date_of_birth %}
+                        <span>{{ profile.date_of_birth }}</span>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+{% endblock %}
+
+{% block content2 %}
+    <h3>My Followers</h3>
+    {% for follower in request.user.profile.follows.all %}
+        <div class="follower">
+
+            <a href="{% url 'profile' follower.user.id %}"><img src="{{ follower.user.profile.profile_picture.url }}"
+                                                                class="profile-image-miniature">
+                <p>{{ follower.user.username }}</p></a>
+            {% if follower.bio %}
+                <p>{{ follower.bio }}</p>
+            {% endif %}
+            {% if follower.date_of_birth %}
+                <p>{{ follower.date_of_birth }}</p>
+            {% endif %}
+        </div>
+    {% endfor %}
+{% endblock %}

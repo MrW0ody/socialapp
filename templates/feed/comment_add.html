@@ -1,0 +1,7 @@
+<div class="comment-form-container">
+    <form method="post" action="{% url 'feed:add_comment' post.id %}">
+        {{ comment_form.as_p }}
+        {% csrf_token %}
+        <p><input type="submit" value="Add Comment"></p>
+    </form>
+</div>

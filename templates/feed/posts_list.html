@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block title %}List of posts {{ request.user }}{% endblock %}
+
+{% block content %}
+    <div class="search">
+        <h1><a href="{% url 'feed:search_posts' %}">Search</a></h1>
+    </div>
+    <div>
+        {% if posts %}
+            {% for post in posts %}
+                <div class="post-container">
+                    <h2><a href="{{ post.get_absolute_url }}">{{ post }}</a></h2>
+                    <p>Published on {{ post.created }} by {{ post.author }}</p>
+                    <br>
+                    <p>{{ post.content|linebreaks|truncatewords:30 }}</p>
+                    <br>
+                    <p>Likes {{ post.number_of_likes }}</p>
+                    <br>
+                    {% if post.author == request.user %}
+                        <div class="post-buttons-container">
+                            <form method="get" action="{% url 'feed:update_post' post.id %}">
+                                {% csrf_token %}
+                                <input type="submit" value="Update" class="update-button">
+                            </form>
+                            <form method="post" action="{% url 'feed:delete_post' post.id %}">
+                                {% csrf_token %}
+                                <input type="submit" value="Delete" class="delete-button">
+                            </form>
+                        </div>
+                    {% endif %}
+                    <form method="post" action="{% url 'feed:react_to_post' post_id=post.id %}">
+                        {% csrf_token %}
+                        {% if request.user in post.likes.all %}
+                            <input type="submit" value="Unlike" class="unlike-button">
+                        {% else %}
+                            <input type="submit" value="Like" class="like-button">
+                        {% endif %}
+                    </form>
+                </div>
+            {% endfor %}
+        {% else %}
+            <h1>You don't have any post yet</h1>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block content2 %}
+    <h3>My Followers</h3>
+    {% for follower in request.user.profile.follows.all %}
+        <div class="follower">
+
+            <a href="{% url 'profile' follower.user.id %}"><img src="{{ follower.user.profile.profile_picture.url }}"
+                                                                class="profile-image-miniature">
+                <p>{{ follower.user.username }}</p></a>
+            {% if follower.bio %}
+                <p>{{ follower.bio }}</p>
+            {% endif %}
+            {% if follower.date_of_birth %}
+                <p>{{ follower.date_of_birth }}</p>
+            {% endif %}
+        </div>
+    {% endfor %}
+{% endblock %}

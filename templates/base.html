@@ -1,0 +1,47 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    <link href="{% static "css/base.css" %}" rel="stylesheet">
+</head>
+<body>
+<nav>
+    <ul class="navigation">
+        <li><a href="{% url 'home' %}">Home</a></li>
+        {% if request.user.is_authenticated %}
+            <li><a href="{% url 'profile' request.user.id %}">Profile</a></li>
+        {% endif %}
+        <li><a href="{% url 'profile_list' %}">Follow people</a></li>
+        {% if not request.user.is_authenticated %}
+            <li><a href="{% url 'login' %}">Login</a></li>
+        {% endif %}
+        {% if request.user.is_authenticated %}
+            <li>
+                <form method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <p><input type="submit" value="Logout" class="button-logout"></p>
+                </form>
+            </li>
+        {% endif %}
+        {% if not request.user.is_authenticated %}
+            <li><a href="{% url 'register' %}">Register</a></li>
+        {% endif %}
+    </ul>
+</nav>
+<main class="main-container">
+    <section class="main-section">
+        {% block content %}
+        {% endblock %}
+    </section>
+    {% if request.user.is_authenticated %}
+        <aside class="side-bar-right">
+            {% block content2 %}
+            {% endblock %}
+        </aside>
+    {% endif %}
+</main>
+</body>
+</html>

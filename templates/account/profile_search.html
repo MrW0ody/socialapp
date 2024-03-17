@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}Search User{% endblock %}
+
+{% block content %}
+    <form method="post">
+        {% csrf_token %}
+        <input type="text" name="username" placeholder="Search Profile" class="search-input" required>
+        <br>
+        <br>
+        <input type="submit" value="Search" class="search-input-submit">
+    </form>
+    {% if search_profiles %}
+        <div class="follower-container">
+            {% for profile in search_profiles %}
+                <div class="profile">
+                    <a href="{% url 'profile' profile.id %}"><img
+                            src="{{ profile.profile.user.profile.profile_picture.url }}"
+                            class="profile-image-miniature">
+                        <p>{{ profile.profile.user.username }}</p></a>
+                    <div class="info">
+
+                        {% if profile.profile.bio %}
+                            <p>{{ profile.profile.bio }}</p>
+                        {% endif %}
+
+                        {% if profile.profile.date_of_birth %}
+                            <span>{{ profile.profile.date_of_birth }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+{% endblock %}
+
+{% block content2 %}
+    <h3>My Followers</h3>
+    {% for follower in request.user.profile.follows.all %}
+        <div class="follower">
+
+            <a href="{% url 'profile' follower.user.id %}"><img src="{{ follower.user.profile.profile_picture.url }}"
+                                                                class="profile-image-miniature">
+                <p>{{ follower.user.username }}</p></a>
+            {% if follower.bio %}
+                <p>{{ follower.bio }}</p>
+            {% endif %}
+            {% if follower.date_of_birth %}
+                <p>{{ follower.date_of_birth }}</p>
+            {% endif %}
+        </div>
+    {% endfor %}
+{% endblock %}

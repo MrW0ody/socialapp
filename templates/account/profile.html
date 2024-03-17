@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}Profile {{ user.username }}{% endblock %}
+
+{% block content %}
+    <div class="profile-container">
+        <div class="photo-container">
+            {% if user.profile %}
+                <img src="{{ user.profile.profile_picture.url }}" class="profile-image">
+            {% else %}
+                <p>No profile picture available.</p>
+            {% endif %}
+        </div>
+        <div class="bio-container">
+            <h1>{{ user|capfirst }}</h1>
+            <br>
+            <h5>Birthday : {{ user.profile.date_of_birth }}</h5>
+            <br>
+            <p>Bio:<br> {{ user.profile.bio|linebreaks|truncatewords:100 }}</p>
+        </div>
+        <div class="profile-buttons">
+            <p><a href="{% url 'feed:list_posts' user.id %}" class="user-posts-button">User posts</a></p>
+            <br>
+            {% if user.profile.id == request.user.profile.id %}
+                <p><a href="{% url 'feed:add_post' %}" class="add-post-button">Add post</a></p>
+                <br>
+                <p><a href="{% url 'profile-edit' request.user.id %}" class="update-button">Edit Profile</a></p>
+            {% endif %}
+            <br>
+            {% if user.profile.id != request.user.profile.id %}
+                <form method="post" action="{% url 'follow_user' user_id=user.profile.id %}">
+                    {% csrf_token %}
+                    {% if user.profile not in request.user.profile.follows.all %}
+                        <input type="submit" value="Follow" class="follow-button">
+                    {% endif %}
+                </form>
+                <form method="post" action="{% url 'unfollow_user' user_id=user.profile.id %}">
+                    {% csrf_token %}
+                    {% if user.profile in request.user.profile.follows.all %}
+                        <input type="submit" value="Unfollow" class="unfollow-button">
+                    {% endif %}
+                </form>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+
+{% block content2 %}
+    <h3>My Followers</h3>
+    {% for follower in request.user.profile.follows.all %}
+        <div class="follower">
+
+            <a href="{% url 'profile' follower.user.id %}"><img src="{{ follower.user.profile.profile_picture.url }}"
+                                                                class="profile-image-miniature">
+                <p>{{ follower.user.username }}</p></a>
+            {% if follower.bio %}
+                <p>{{ follower.bio }}</p>
+            {% endif %}
+            {% if follower.date_of_birth %}
+                <p>{{ follower.date_of_birth }}</p>
+            {% endif %}
+        </div>
+    {% endfor %}
+{% endblock %}
