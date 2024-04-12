@@ -10,7 +10,7 @@ Technologies and skills utilized:
 
 **PostgreSQL**: Employed PostgreSQL database for its reliability, scalability, and ability to handle large amounts of data.
 
-**Docker**: The project was containerized with Docker, facilitating dependency management and ensuring consistent runtime environments for developers.
+**Docker**: The project was containerized with Docker, facilitating dependency management and ensuring consistent runtime environments for me.
 
 **Web** Application: The developed application serves as a full-fledged social media platform, enabling user interaction through post creation, commenting, and liking.
 
