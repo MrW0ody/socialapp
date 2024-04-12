@@ -1,4 +1,5 @@
 import os
+import sys
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -77,8 +78,11 @@ DATABASES = {
         'NAME': os.getenv('POSTGRES_DB'),
         'USER': os.getenv('POSTGRES_USER'),
         'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
-        'HOST': 'db',  # Name the service container database using the docker-compose.yml file
+        'HOST': 'db',
         'PORT': '5432',
+        'TEST': {
+            'NAME': 'test_social_app_db',  # Dodaj prefix "test_" do nazwy bazy danych testowej
+        }
     }
 }
 
