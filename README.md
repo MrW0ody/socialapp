@@ -28,6 +28,12 @@ Technologies and skills utilized:
 
     docker-compose exec django python manage.py migrate
 
+# Tests
+
+to run tests:
+
+    docker-compose exec django pytest
+
 # Usage Instructions:
 
 Navigate to the application's home page by opening a web browser and visiting 
